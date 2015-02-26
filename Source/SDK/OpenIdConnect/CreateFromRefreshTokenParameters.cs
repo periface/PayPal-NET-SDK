@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace PayPal.Api
@@ -5,71 +6,67 @@ namespace PayPal.Api
     public class CreateFromRefreshTokenParameters : ClientCredentials
     {
         /// <summary>
-        /// Scope used in query parameters
+        /// Gets or sets a space-delimited string containing the resource URL endpoints that the client wants the token to be scoped for.
         /// </summary>
-        private const string Scope = "scope";
+        public string Scope
+        {
+            get { return (this.ContainerMap.ContainsKey("scope") ? this.ContainerMap["scope"] : null); }
+            set { this.ContainerMap["scope"] = value; }
+        }
 
         /// <summary>
-        /// Grant Type used in query parameters
+        /// Gets or sets the token grant type.
         /// </summary>
-        private const string GrantType = "grant_type";
+        public string GrantType
+        {
+            get { return (this.ContainerMap.ContainsKey("grant_type") ? this.ContainerMap["grant_type"] : null); }
+            set { this.ContainerMap["grant_type"] = value; }
+        }
 
         /// <summary>
-        /// Refresh Token used in query parameters
+        /// Gets or sets a previously received refresh token.
         /// </summary>
-        private const string RefreshToken = "refresh_token";
+        public string RefreshToken
+        {
+            get { return (this.ContainerMap.ContainsKey("refresh_token") ? this.ContainerMap["refresh_token"] : null); }
+            set { this.ContainerMap["refresh_token"] = value; }
+        }
 
         /// <summary>
-        /// Backing map
+        /// Gets or sets the container map used to store custom parameters.
         /// </summary>
-        private Dictionary<string, string> mapContainer;
+        public Dictionary<string, string> ContainerMap { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the CreateFromRefreshTokenParameters class and defaults the GrantType to 'refresh_token'.
+        /// </summary>
         public CreateFromRefreshTokenParameters()
         {
-            ContainerMap = new Dictionary<string, string>();
-            ContainerMap.Add(GrantType, "refresh_token");
+            this.ContainerMap = new Dictionary<string, string>();
+            this.GrantType = "refresh_token";
         }
 
-        /// <summary>
-        /// Backing map
-        /// </summary>
-        public Dictionary<string, string> ContainerMap
-        {
-            get
-            {
-                return this.mapContainer;
-            }
-            set
-            {
-                this.mapContainer = value;
-            }
-        }
-
+        #region Obsolete Methods
         /// <summary>
         /// Set the scope
         /// </summary>
-        /// <param name="scope"></param>
-        public void SetScope(string scope)
-        {
-            ContainerMap.Add(Scope, scope);
-        }
+        /// <param name="scope">Resource URL endpoints that the client wants the token to be scoped for.</param>
+        [Obsolete("This method is obsolete. Use the Scope property.", false)]
+        public void SetScope(string scope) { this.Scope = scope; }
 
         /// <summary>
         /// Set the Grant Type
         /// </summary>
         /// <param name="grantType"></param>
-        public void SetGrantType(string grantType)
-        {
-            ContainerMap.Add(GrantType, grantType);
-        }
+        [Obsolete("This method is obsolete. Use the GrantType property.", false)]
+        public void SetGrantType(string grantType) { this.GrantType = grantType; }
 
         /// <summary>
         /// Set the Refresh Token
         /// </summary>
         /// <param name="refreshToken"></param>
-        public void SetRefreshToken(string refreshToken)
-        {
-            ContainerMap.Add(RefreshToken, refreshToken);
-        }
+        [Obsolete("This method is obsolete. Use the RefreshToken property.", false)]
+        public void SetRefreshToken(string refreshToken) { this.RefreshToken = refreshToken; }
+        #endregion
     }
 }

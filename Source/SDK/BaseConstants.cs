@@ -1,5 +1,6 @@
 using System.Text;
 using PayPal.Util;
+using System;
 
 namespace PayPal.Api
 {
@@ -131,11 +132,26 @@ namespace PayPal.Api
         // Configuration key suffix for Client Secret
         public const string ClientSecret = "clientSecret";
 
-        // OpenId Redirect URI config key
+        /// <summary>
+        /// OpenId Redirect URI config key
+        /// </summary>
         public const string OpenIdRedirectUri = "openid.RedirectUri";
 
-        // OpenId Redirect URI default value
-        public const string OpenIdRedirectUriConstant = "https://www.paypal.com/webapps/auth/protocol/openidconnect";
+        /// <summary>
+        /// OpenId Redirect URI default value
+        /// </summary>
+        [Obsolete("This constant is obsolete. Use either OpenIdRedirectUriLive or OpenIdRedirectUriSandbox.")]
+        public const string OpenIdRedirectUriConstant = OpenIdRedirectUriSandbox;
+
+        /// <summary>
+        /// Live OpenId redirect URI.
+        /// </summary>
+        public const string OpenIdRedirectUriLive = "https://www.paypal.com/webapps/auth/protocol/openidconnect";
+
+        /// <summary>
+        /// Sandbox OpenId redirect URI.
+        /// </summary>
+        public const string OpenIdRedirectUriSandbox = "https://www.sandbox.paypal.com/webapps/auth/protocol/openidconnect";
 
         // OAuth endpoint config key
         public const string OAuthEndpoint = "oauth.EndPoint";

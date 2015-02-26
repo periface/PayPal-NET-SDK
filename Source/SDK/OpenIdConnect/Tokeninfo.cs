@@ -1,8 +1,9 @@
 using System.Web;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using PayPal.Util;
+using System.Collections.Generic;
+using System;
 
 namespace PayPal.Api
 {
@@ -69,9 +70,7 @@ namespace PayPal.Api
         /// </summary>
         public static Tokeninfo CreateFromAuthorizationCode(APIContext apiContext, CreateFromAuthorizationCodeParameters createFromAuthorizationCodeParameters)
         {
-            var pattern = "v1/identity/openidconnect/tokenservice?grant_type={0}&code={1}&redirect_uri={2}";
-            var parameters = new object[] { createFromAuthorizationCodeParameters };
-            var resourcePath = SDKUtil.FormatURIPath(pattern, parameters);
+            var resourcePath = "v1/identity/openidconnect/tokenservice";
             return CreateFromAuthorizationCodeParameters(apiContext, createFromAuthorizationCodeParameters, resourcePath);
         }
 
@@ -79,69 +78,94 @@ namespace PayPal.Api
         /// Creates Access and Refresh Tokens from an Authorization Code for future payments.
         /// </summary>
         /// <param name="apiContext">APIContext to be used for the call.</param>
-        /// <param name="createFromAuthorizationCodeParameters">Query parameters used for the API call.</param>
+        /// <param name="parameters">Query parameters used for the API call.</param>
         /// <returns>A TokenInfo object containing the Access and Refresh Tokens.</returns>
-        public static Tokeninfo CreateFromAuthorizationCodeForFuturePayments(APIContext apiContext, CreateFromAuthorizationCodeParameters createFromAuthorizationCodeParameters)
+        public static Tokeninfo CreateFromAuthorizationCodeForFuturePayments(APIContext apiContext, CreateFromAuthorizationCodeParameters parameters)
         {
-            var pattern = "v1/oauth2/token?grant_type=authorization_code&response_type=token&redirect_uri=urn:ietf:wg:oauth:2.0:oob&code={0}";
-            var parameters = new object[] { createFromAuthorizationCodeParameters.ContainerMap["code"] };
-            var resourcePath = SDKUtil.FormatURIPath(pattern, parameters);
-            return CreateFromAuthorizationCodeParameters(apiContext, createFromAuthorizationCodeParameters, resourcePath);
+            parameters.RedirectUri = "urn:ietf:wg:oauth:2.0:oob";
+            parameters.ResponseType = "token";
+            var resourcePath = "v1/oauth2/token";
+            return CreateFromAuthorizationCodeParameters(apiContext, parameters, resourcePath);
         }
 
         /// <summary>
         /// Helper method for creating Access and Refresh Tokens from an Authorization Code.
         /// </summary>
         /// <param name="apiContext">APIContext to be used for the call.</param>
-        /// <param name="createFromAuthorizationCodeParameters">Query parameters used for the API call.</param>
+        /// <param name="parameters">Query parameters used for the API call.</param>
         /// <param name="resourcePath">The path to the REST API resource that will be requested.</param>
         /// <returns>A TokenInfo object containing the Access and Refresh Tokens.</returns>
-        private static Tokeninfo CreateFromAuthorizationCodeParameters(APIContext apiContext, CreateFromAuthorizationCodeParameters createFromAuthorizationCodeParameters, string resourcePath)
+        private static Tokeninfo CreateFromAuthorizationCodeParameters(APIContext apiContext, CreateFromAuthorizationCodeParameters parameters, string resourcePath)
         {
-            var payLoad = resourcePath.Substring(resourcePath.IndexOf('?') + 1);
-            resourcePath = resourcePath.Substring(0, resourcePath.IndexOf("?"));
-            var headersMap = new Dictionary<string, string>();
-            headersMap.Add(BaseConstants.ContentTypeHeader, "application/x-www-form-urlencoded");
-            if (apiContext == null)
+            // Validate the arguments to be used in the request
+            ArgumentValidator.ValidateAndSetupAPIContext(apiContext);
+            ArgumentValidator.Validate(parameters, "parameters");
+
+            var payloadQueryParameters = new QueryParameters
             {
-                apiContext = new APIContext();
-            }
-            apiContext.HTTPHeaders = headersMap;
+                { "grant_type", string.IsNullOrEmpty(parameters.GrantType) ? "authorization_code" : parameters.GrantType },
+                { "response_type", parameters.ResponseType },
+                { "redirect_uri", parameters.RedirectUri },
+                { "code", parameters.Code }
+            };
+            var payload = payloadQueryParameters.ToUrlFormattedString(false);
+
+            apiContext.HTTPHeaders[BaseConstants.ContentTypeHeader] = "application/x-www-form-urlencoded";
             apiContext.MaskRequestId = true;
-            return PayPalResource.ConfigureAndExecute<Tokeninfo>(apiContext, HttpMethod.POST, resourcePath, payLoad);
+            return PayPalResource.ConfigureAndExecute<Tokeninfo>(apiContext, HttpMethod.POST, resourcePath, payload);
         }
 
         /// <summary>
         /// Creates an Access Token from an Refresh Token.
-        /// <param name="createFromRefreshTokenParameters">Query parameters used for API call</param>
+        /// <param name="parameters">Query parameters used for API call</param>
         /// </summary>
-        public Tokeninfo CreateFromRefreshToken(CreateFromRefreshTokenParameters createFromRefreshTokenParameters)
+        public Tokeninfo CreateFromRefreshToken(CreateFromRefreshTokenParameters parameters)
         {
-            return CreateFromRefreshToken(null, createFromRefreshTokenParameters);
+            return CreateFromRefreshToken(null, parameters);
         }
 
         /// <summary>
         /// Creates an Access Token from an Refresh Token
         /// <param name="apiContext">APIContext to be used for the call</param>
-        /// <param name="createFromRefreshTokenParameters">Query parameters used for API call</param>
+        /// <param name="parameters">Query parameters used for API call</param>
         /// </summary>
-        public Tokeninfo CreateFromRefreshToken(APIContext apiContext, CreateFromRefreshTokenParameters createFromRefreshTokenParameters)
+        public Tokeninfo CreateFromRefreshToken(APIContext apiContext, CreateFromRefreshTokenParameters parameters)
         {
-            string pattern = "v1/identity/openidconnect/tokenservice?grant_type={0}&refresh_token={1}&scope={2}&client_id={3}&client_secret={4}";
-            createFromRefreshTokenParameters.SetRefreshToken(HttpUtility.UrlEncode(refresh_token));
-            object[] parameters = new object[] { createFromRefreshTokenParameters };
-            string resourcePath = SDKUtil.FormatURIPath(pattern, parameters);
-            string payLoad = resourcePath.Substring(resourcePath.IndexOf('?') + 1);
-            resourcePath = resourcePath.Substring(0, resourcePath.IndexOf("?"));
-            Dictionary<string, string> headersMap = new Dictionary<string, string>();
-            headersMap.Add(BaseConstants.ContentTypeHeader, "application/x-www-form-urlencoded");
+            // Validate the arguments to be used in the request
+            ArgumentValidator.Validate(parameters, "parameters");
+
+            // Verify the client ID and secret are defined.
             if (apiContext == null)
             {
-                apiContext = new APIContext();
+                apiContext = new APIContext
+                {
+                    Config = ConfigManager.Instance.GetProperties()
+                };
+
+                if (!string.IsNullOrEmpty(parameters.ClientId))
+                {
+                    apiContext.Config[BaseConstants.ClientId] = parameters.ClientId;
+                }
+                if (!string.IsNullOrEmpty(parameters.ClientSecret))
+                {
+                    apiContext.Config[BaseConstants.ClientSecret] = parameters.ClientSecret;
+                }
             }
-            apiContext.HTTPHeaders = headersMap;
+
+            // Set the request payload
+            var payloadQueryParameters = new QueryParameters
+            {
+                { "grant_type", string.IsNullOrEmpty(parameters.GrantType) ? "refresh_token" : parameters.GrantType },
+                { "refresh_token", string.IsNullOrEmpty(parameters.RefreshToken) ? HttpUtility.UrlEncode(refresh_token) : parameters.RefreshToken },
+                { "scope", parameters.Scope }
+            };
+            var payload = payloadQueryParameters.ToUrlFormattedString(false);
+
+            // Configure and send the request.
+            apiContext.HTTPHeaders[BaseConstants.ContentTypeHeader] = "application/x-www-form-urlencoded";
             apiContext.MaskRequestId = true;
-            return PayPalResource.ConfigureAndExecute<Tokeninfo>(apiContext, HttpMethod.POST, resourcePath, payLoad);
+            var resourcePath = "v1/identity/openidconnect/tokenservice";
+            return PayPalResource.ConfigureAndExecute<Tokeninfo>(apiContext, HttpMethod.POST, resourcePath, payload);
         }
     }
 }

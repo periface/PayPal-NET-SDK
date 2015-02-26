@@ -144,6 +144,7 @@
     <ExternalCompile Include="OpenIdConnect\CreateFromAuthorizationCodeParameters.cs" />
     <ExternalCompile Include="OpenIdConnect\CreateFromRefreshTokenParameters.cs" />
     <ExternalCompile Include="OpenIdConnect\UserinfoParameters.cs" />
+    <ExternalCompile Include="OpenIdConnect\OpenIdConnectSession.cs" />
     <ExternalCompile Include="PayPalResource.cs" />
     <ExternalCompile Include="Properties\AssemblyInfo.cs" />
     <ExternalCompile Include="RESTAPICallPreHandler.cs" />

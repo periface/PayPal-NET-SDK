@@ -36,7 +36,7 @@ namespace PayPal
         /// <exception cref="PayPal.Exception.HttpException">Thrown if there was an error sending the request.</exception>
         /// <exception cref="PayPal.Exception.PaymentsException">Thrown if an HttpException was raised and contains a Payments API error object.</exception>
         /// <exception cref="PayPal.Exception.PayPalException">Thrown for any other issues encountered. See inner exception for further details.</exception>
-        public static object ConfigureAndExecute(APIContext apiContext, HttpMethod httpMethod, string resource, string payload = "")
+        public static object ConfigureAndExecute(APIContext apiContext, HttpMethod httpMethod, string resource, string payload = "", bool forceBasicAuthorization = false)
         {
             return ConfigureAndExecute<object>(apiContext, httpMethod, resource, payload);
         }
@@ -53,44 +53,22 @@ namespace PayPal
         /// <exception cref="PayPal.Exception.HttpException">Thrown if there was an error sending the request.</exception>
         /// <exception cref="PayPal.Exception.PaymentsException">Thrown if an HttpException was raised and contains a Payments API error object.</exception>
         /// <exception cref="PayPal.Exception.PayPalException">Thrown for any other issues encountered. See inner exception for further details.</exception>
-        public static T ConfigureAndExecute<T>(APIContext apiContext, HttpMethod httpMethod, string resource, string payload = "")
+        public static T ConfigureAndExecute<T>(APIContext apiContext, HttpMethod httpMethod, string resource, string payload = "", bool forceBasicAuthorization = false)
         {
-            Dictionary<string, string> config = null;
-            String authorizationToken = null;
-            String resourcePath = null;
-            Dictionary<string, string> headersMap = null;
-            String requestId = null;
+            // apiContext must be set in order to execute the call.
             if (apiContext == null)
             {
                 throw new PayPalException("APIContext object is null");
             }
 
-            // Fix config object befor proceeding further
-            if (apiContext.Config == null)
-            {
-                config = ConfigManager.GetConfigWithDefaults(ConfigManager.Instance.GetProperties());
-            }
-            else
-            {
-                config = ConfigManager.GetConfigWithDefaults(apiContext.Config);
-            }
-
-            // Access Token
-            authorizationToken = apiContext.AccessToken;
-
-            // Resource URI path
-            resourcePath = resource;
-
-            // Custom HTTP Headers
-            headersMap = apiContext.HTTPHeaders;
-
-            // PayPal Request Id
-            requestId = apiContext.RequestId;
+            // Setup the config to be used with the call.
+            var config = apiContext.Config == null ? ConfigManager.GetConfigWithDefaults(ConfigManager.Instance.GetProperties()) : ConfigManager.GetConfigWithDefaults(apiContext.Config);
 
             // Create an instance of IAPICallPreHandler
-            IAPICallPreHandler apiCallPreHandler = CreateIAPICallPreHandler(config, headersMap, authorizationToken, requestId, payload, apiContext.SdkVersion);
+            // TODO: Remove the prehandler as it's no longer needed (this was meant to simplify Classic and REST calls).
+            IAPICallPreHandler apiCallPreHandler = CreateIAPICallPreHandler(config, apiContext.HTTPHeaders, apiContext.AccessToken, apiContext.RequestId, payload, apiContext.SdkVersion);
 
-            return ConfigureAndExecute<T>(config, apiCallPreHandler, httpMethod, resourcePath);
+            return ConfigureAndExecute<T>(config, apiCallPreHandler, httpMethod, resource);
         }
 
         /// <summary>
@@ -147,7 +125,7 @@ namespace PayPal
                     // Set Custom HTTP headers
                     foreach (KeyValuePair<string, string> entry in headersMap)
                     {
-                        httpRequest.Headers.Add(entry.Key, entry.Value);
+                        httpRequest.Headers[entry.Key] = entry.Value;
                     }
 
                     foreach (string headerName in httpRequest.Headers)

@@ -129,6 +129,16 @@ namespace PayPal.Sample
                             new SampleItem { Title = "Retrieve the details of a payout item", ExecutePage = "PayoutItemGet.aspx", HasSourcePage = true },
                             new SampleItem { Title = "Cancel a payout item", ExecutePage = "PayoutItemCancel.aspx", HasSourcePage = true }
                         }
+                    },
+                    new SampleCategory
+                    {
+                        Title = "Log In With PayPal",
+                        Id = "lipp",
+                        Items = new List<SampleItem>
+                        {
+                            new SampleItem { Title = "Obtain user consent", ExecutePage = "LogInWithPayPalObtainUserConsent.aspx", HasSourcePage = true },
+                            new SampleItem { Title = "Get user information", ExecutePage = "LogInWithPayPalGetUserInfo.aspx", HasSourcePage = true }
+                        }
                     }
                 };
             }

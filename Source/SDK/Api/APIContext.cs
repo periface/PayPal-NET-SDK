@@ -6,59 +6,38 @@ namespace PayPal.Api
     public class APIContext
     {
         /// <summary>
-        /// Access Token
-        /// </summary>
-        private string token;
-
-        /// <summary>
         /// Request Id
         /// </summary>
         private string reqId;
 
         /// <summary>
-        /// Mask Request Id
-        /// </summary>
-        private bool maskReqId;
-
-        /// <summary>
-        /// Dynamic configuration
-        /// </summary>
-        private Dictionary<string, string> dynamicConfig;
-
-        /// <summary>
-        /// HTTP Headers
-        /// </summary>
-        private Dictionary<string, string> httpHeaders;
-
-        /// <summary>
-        /// SDKVersion instance
-        /// </summary>
-        private SDKVersion sVersion;
-
-        /// <summary>
         /// Explicit default constructor
         /// </summary>
-        public APIContext() { }
+        public APIContext()
+        {
+            this.HTTPHeaders = new Dictionary<string, string>();
+            this.SdkVersion = new SDKVersion();
+        }
 
         /// <summary>
         /// Access Token required for the call
         /// </summary>
-        /// <param name="token"></param>
-        public APIContext(string token)
+        /// <param name="accessToken"></param>
+        public APIContext(string accessToken) : this()
         {
-            if (string.IsNullOrEmpty(token))
+            if (string.IsNullOrEmpty(accessToken))
             {
                 throw new ArgumentNullException("AccessToken cannot be null");
             }
-            this.token = token;
+            this.AccessToken = accessToken;
         }
 
         /// <summary>
         /// Access Token and Request Id required for the call
         /// </summary>
-        /// <param name="token"></param>
+        /// <param name="accessToken"></param>
         /// <param name="requestId"></param>
-        public APIContext(string token, string requestId) : this(token)
+        public APIContext(string accessToken, string requestId) : this(accessToken)
         {
             if (string.IsNullOrEmpty(requestId))
             {
@@ -70,28 +49,12 @@ namespace PayPal.Api
         /// <summary>
         /// Gets the Access Token
         /// </summary>
-        public string AccessToken
-        {
-            get
-            {
-                return token;
-            }
-        }
+        public string AccessToken { get; private set; }
 
         /// <summary>
         /// Gets and sets the Mask Request Id
         /// </summary>
-        public bool MaskRequestId
-        {
-            get
-            {
-                return this.maskReqId;
-            }
-            set
-            {
-                this.maskReqId = value;
-            }
-        }
+        public bool MaskRequestId { get; set; }
         
         /// <summary>
         /// Gets the Request Id
@@ -100,59 +63,31 @@ namespace PayPal.Api
         {
             get
             {
-                string returnId = null;
-                if (!MaskRequestId)
+                if (!this.MaskRequestId)
                 {
-                    if (string.IsNullOrEmpty(reqId))
+                    if (string.IsNullOrEmpty(this.reqId))
                     {
-                        reqId = Convert.ToString(Guid.NewGuid());
+                        this.reqId = Convert.ToString(Guid.NewGuid());
                     }
-                    returnId = reqId;
+                    return this.reqId;
                 }
-                return returnId;
+                return null;
             }
         }
 
         /// <summary>
         /// Gets and sets the Dynamic Configuration
         /// </summary>
-        public Dictionary<string, string> Config
-        {
-            get
-            {
-                return this.dynamicConfig;
-            }
-            set
-            {
-                this.dynamicConfig = value;
-            }
-        }
+        public Dictionary<string, string> Config { get; set; }
 
         /// <summary>
         /// Gets and sets HTTP Headers
         /// </summary>
-        public Dictionary<string, string> HTTPHeaders
-        {
-            get
-            {
-                return this.httpHeaders;
-            }
-            set
-            {
-                this.httpHeaders = value;
-            }
-        }
+        public Dictionary<string, string> HTTPHeaders { get; set; }
 
-        public SDKVersion SdkVersion
-        {
-            get
-            {
-                return sVersion;
-            }
-            set
-            {
-                sVersion = value;
-            }
-        }
+        /// <summary>
+        /// Get or sets the SDK version.
+        /// </summary>
+        public SDKVersion SdkVersion { get; set; }
     }
 }

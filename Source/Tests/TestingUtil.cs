@@ -11,8 +11,8 @@ namespace PayPal.Testing
         {
             return new Dictionary<string, string>
             {
-                { BaseConstants.ClientId, "AWdYxxA6pvcbjhb51A4BUosqeNv8u6mlFX7CZ_d-D6WakmFVRGeG5X43FJql" },
-                { BaseConstants.ClientSecret, "EFCQHhChJbtb4bjvQO593E3-shFeIXLh-a0Sxp7luqvqwzlOG10ueTly2EHf" },
+                { BaseConstants.ClientId, "AUASNhD7YM7dc5Wmc5YE9pEsC0o4eVOyYWO9ezXWBu2XTc63d3Au_s9c-v-U" },
+                { BaseConstants.ClientSecret, "EBq0TRAE-4R9kgCDKzVh09sm1TeNcuY-xJirid7LNtheUh5t5vlOhR0XSHt3" },
                 { BaseConstants.ApplicationModeConfig, BaseConstants.SandboxMode },
                 { "connectionTimeout", "360000" },
                 { "requestRetries", "1" }

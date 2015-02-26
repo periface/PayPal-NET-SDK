@@ -168,7 +168,7 @@ namespace PayPal.Api
         /// <exception cref="PayPal.Exception.MissingCredentialException">Thrown if clientId or clientSecret are null or empty.</exception>
         /// <exception cref="PayPal.Exception.InvalidCredentialException">Thrown if there is an issue converting the credentials to a formatted authorization string.</exception>
         /// <exception cref="PayPal.Exception.PayPalException">Thrown for any other issue encountered. See inner exception for further details.</exception>
-        private static string ConvertClientCredentialsToBase64String(string clientId, string clientSecret)
+        public static string ConvertClientCredentialsToBase64String(string clientId, string clientSecret)
         {
             // Validate the provided credentials. If either value is null or empty, then throw.
             if (string.IsNullOrEmpty(clientId))
@@ -239,7 +239,7 @@ namespace PayPal.Api
                 HttpWebRequest httpRequest = connManager.GetConnection(this.config, uniformResourceIdentifier.AbsoluteUri);  
             
             Dictionary<string, string> headers = new Dictionary<string, string>();
-            headers.Add("Authorization", "Basic " + base64ClientId);
+            headers[BaseConstants.AuthorizationHeader] = "Basic " + base64ClientId;
             string postRequest = "grant_type=client_credentials";
             httpRequest.Method = "POST";
             httpRequest.Accept = "*/*";
@@ -259,7 +259,7 @@ namespace PayPal.Api
             // Set Custom HTTP headers
             foreach (KeyValuePair<string, string> header in headers)
             {
-                httpRequest.Headers.Add(header.Key, header.Value);
+                httpRequest.Headers[header.Key] = header.Value;
             }
 
             foreach (string headerName in httpRequest.Headers)

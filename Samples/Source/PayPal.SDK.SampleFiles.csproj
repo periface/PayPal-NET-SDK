@@ -62,8 +62,24 @@
     <ExternalContent Include="Scripts\jquery-1.9.0.min.js" />
     <ExternalContent Include="Web.config" />
     <ExternalContent Include="Scripts\jquery-1.9.0.min.map" />
+    <ExternalContent Include="LogInWithPayPalGetUserInfo.aspx" />
+    <ExternalContent Include="LogInWithPayPalObtainUserConsent.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <ExternalCompile Include="LogInWithPayPalGetUserInfo.aspx.cs">
+      <DependentUpon>LogInWithPayPalGetUserInfo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </ExternalCompile>
+    <ExternalCompile Include="LogInWithPayPalGetUserInfo.aspx.designer.cs">
+      <DependentUpon>LogInWithPayPalGetUserInfo.aspx</DependentUpon>
+    </ExternalCompile>
+    <ExternalCompile Include="LogInWithPayPalObtainUserConsent.aspx.cs">
+      <DependentUpon>LogInWithPayPalObtainUserConsent.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </ExternalCompile>
+    <ExternalCompile Include="LogInWithPayPalObtainUserConsent.aspx.designer.cs">
+      <DependentUpon>LogInWithPayPalObtainUserConsent.aspx</DependentUpon>
+    </ExternalCompile>
     <ExternalCompile Include="PayoutItemCancel.aspx.cs">
       <DependentUpon>PayoutItemCancel.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

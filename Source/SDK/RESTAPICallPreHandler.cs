@@ -62,30 +62,6 @@ namespace PayPal.Api
 
         public Dictionary<string, string> GetHeaderMap()
         {
-            return GetProcessedHeadersMap();
-        }
-
-        public string GetPayload()
-        {
-            return GetProcessedPayload();
-        }
-
-        public string GetEndpoint()
-        {
-            return GetProcessedEndPoint();
-        }
-
-        public PayPal.Authentication.ICredential GetCredential()
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Overrided this method to return HTTP headers
-        /// </summary>
-        /// <returns>HTTP headers as Dictionary</returns>
-        protected Dictionary<string, string> GetProcessedHeadersMap()
-        {
             Dictionary<string, string> headers = new Dictionary<string, string>();
 
             /*
@@ -134,26 +110,12 @@ namespace PayPal.Api
             return headers;
         }
 
-        /// <summary>
-        /// Override this method to post process the payload.
-        /// The payload is returned unaltered as a default
-        /// behaviour
-        /// </summary>
-        /// <returns>Payload string</returns>
-        protected string GetProcessedPayload()
+        public string GetPayload()
         {
-            /*
-		     * Since the REST API of PayPal depends on json, which is
-		     * well formed, no additional processing is required.
-		     */
-            return Payload;
+            return this.Payload;
         }
 
-        /// <summary>
-        /// Override this method to return default behavior for endpoint fetching
-        /// </summary>
-        /// <returns>Endpoint as a string</returns>
-        protected string GetProcessedEndPoint()
+        public string GetEndpoint()
         {
             string endpoint = null;
             if (config.ContainsKey(BaseConstants.EndpointConfig))
@@ -177,6 +139,11 @@ namespace PayPal.Api
                 endpoint += "/";
             }
             return endpoint;
+        }
+
+        public PayPal.Authentication.ICredential GetCredential()
+        {
+            return null;
         }
 
         /// <summary>
@@ -205,18 +172,6 @@ namespace PayPal.Api
                 byte[] bytes = Encoding.UTF8.GetBytes(clientID + ":" + clientSecret);
                 string base64ClientID = Convert.ToBase64String(bytes);
                 return base64ClientID;
-            }
-            catch (ArgumentOutOfRangeException ex)
-            {
-                throw new PayPalException(ex.Message, ex);
-            }
-            catch (ArgumentException ex)
-            {
-                throw new PayPalException(ex.Message, ex);
-            }
-            catch (NotSupportedException ex)
-            {
-                throw new PayPalException(ex.Message, ex);
             }
             catch (System.Exception ex)
             {

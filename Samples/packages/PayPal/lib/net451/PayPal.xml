@@ -61,34 +61,9 @@
             Total number of failed payments for this agreement.
             </summary>
         </member>
-        <member name="F:PayPal.Api.APIContext.token">
-            <summary>
-            Access Token
-            </summary>
-        </member>
         <member name="F:PayPal.Api.APIContext.reqId">
             <summary>
             Request Id
-            </summary>
-        </member>
-        <member name="F:PayPal.Api.APIContext.maskReqId">
-            <summary>
-            Mask Request Id
-            </summary>
-        </member>
-        <member name="F:PayPal.Api.APIContext.dynamicConfig">
-            <summary>
-            Dynamic configuration
-            </summary>
-        </member>
-        <member name="F:PayPal.Api.APIContext.httpHeaders">
-            <summary>
-            HTTP Headers
-            </summary>
-        </member>
-        <member name="F:PayPal.Api.APIContext.sVersion">
-            <summary>
-            SDKVersion instance
             </summary>
         </member>
         <member name="M:PayPal.Api.APIContext.#ctor">
@@ -100,13 +75,13 @@
             <summary>
             Access Token required for the call
             </summary>
-            <param name="token"></param>
+            <param name="accessToken"></param>
         </member>
         <member name="M:PayPal.Api.APIContext.#ctor(System.String,System.String)">
             <summary>
             Access Token and Request Id required for the call
             </summary>
-            <param name="token"></param>
+            <param name="accessToken"></param>
             <param name="requestId"></param>
         </member>
         <member name="P:PayPal.Api.APIContext.AccessToken">
@@ -132,6 +107,11 @@
         <member name="P:PayPal.Api.APIContext.HTTPHeaders">
             <summary>
             Gets and sets HTTP Headers
+            </summary>
+        </member>
+        <member name="P:PayPal.Api.APIContext.SdkVersion">
+            <summary>
+            Get or sets the SDK version.
             </summary>
         </member>
         <member name="T:PayPal.Api.PayPalResourceObject">
@@ -4140,7 +4120,7 @@
             Creates Access and Refresh Tokens from an Authorization Code for future payments.
             </summary>
             <param name="apiContext">APIContext to be used for the call.</param>
-            <param name="createFromAuthorizationCodeParameters">Query parameters used for the API call.</param>
+            <param name="parameters">Query parameters used for the API call.</param>
             <returns>A TokenInfo object containing the Access and Refresh Tokens.</returns>
         </member>
         <member name="M:PayPal.Api.Tokeninfo.CreateFromAuthorizationCodeParameters(PayPal.Api.APIContext,PayPal.Api.CreateFromAuthorizationCodeParameters,System.String)">
@@ -4148,7 +4128,7 @@
             Helper method for creating Access and Refresh Tokens from an Authorization Code.
             </summary>
             <param name="apiContext">APIContext to be used for the call.</param>
-            <param name="createFromAuthorizationCodeParameters">Query parameters used for the API call.</param>
+            <param name="parameters">Query parameters used for the API call.</param>
             <param name="resourcePath">The path to the REST API resource that will be requested.</param>
             <returns>A TokenInfo object containing the Access and Refresh Tokens.</returns>
         </member>
@@ -4162,7 +4142,7 @@
             <summary>
             Creates an Access Token from an Refresh Token
             <param name="apiContext">APIContext to be used for the call</param>
-            <param name="createFromRefreshTokenParameters">Query parameters used for API call</param>
+            <param name="parameters">Query parameters used for API call</param>
             </summary>
         </member>
         <member name="P:PayPal.Api.Tokeninfo.scope">
@@ -4221,6 +4201,36 @@
             Acts as base type for any credential required
             by the service for authentication. Credential implementations are
             essentially information passed on to any API service for authentication
+            </summary>
+        </member>
+        <member name="F:PayPal.Api.BaseConstants.RESTSandboxEndpoint">
+            <summary>
+            Sandbox REST API endpoint
+            </summary>
+        </member>
+        <member name="F:PayPal.Api.BaseConstants.RESTLiveEndpoint">
+            <summary>
+            Live REST API endpoint
+            </summary>
+        </member>
+        <member name="F:PayPal.Api.BaseConstants.OpenIdRedirectUri">
+            <summary>
+            OpenId Redirect URI config key
+            </summary>
+        </member>
+        <member name="F:PayPal.Api.BaseConstants.OpenIdRedirectUriConstant">
+            <summary>
+            OpenId Redirect URI default value
+            </summary>
+        </member>
+        <member name="F:PayPal.Api.BaseConstants.OpenIdRedirectUriLive">
+            <summary>
+            Live OpenId redirect URI.
+            </summary>
+        </member>
+        <member name="F:PayPal.Api.BaseConstants.OpenIdRedirectUriSandbox">
+            <summary>
+            Sandbox OpenId redirect URI.
             </summary>
         </member>
         <member name="T:PayPal.Api.BaseConstants.HateoasLinkRelations">
@@ -4698,130 +4708,125 @@
             Abstract base for the loggers
             </summary>
         </member>
-        <member name="F:PayPal.Log.BaseLogger.typeGiven">
-            <summary>
-            Type specified
-            </summary>
-        </member>
         <member name="M:PayPal.Log.BaseLogger.#ctor(System.Type)">
             <summary>
-            Abstract base 'BaseLogger' contructor overload
+            Initializes a new instance of this logger and associates it with the specified object type.
             </summary>
-            <param name="typeGiven"></param>
+            <param name="typeGiven">The type to associate with this logger.</param>
         </member>
         <member name="M:PayPal.Log.BaseLogger.Debug(System.String)">
             <summary>
-            Abstract wrapper for Debug
+            Records a debug message to the log.
             </summary>
-            <param name="message"></param>
+            <param name="message">The message to be logged.</param>
         </member>
         <member name="M:PayPal.Log.BaseLogger.Debug(System.String,System.Exception)">
             <summary>
-            Abstract wrapper for Debug
+            Records a debug message, including any exception details, to the log.
             </summary>
-            <param name="message"></param>
-            <param name="exception"></param>
+            <param name="message">The message to be logged.</param>
+            <param name="exception">Exception details to be logged.</param>
         </member>
         <member name="M:PayPal.Log.BaseLogger.DebugFormat(System.String,System.Object[])">
             <summary>
-            Abstract wrapper for DebugFormat
+            Records a formatted debug message to the log.
             </summary>
-            <param name="format"></param>
-            <param name="args"></param>
+            <param name="format">A composite format string to be logged.</param>
+            <param name="args">An array that contains zero or more objects to format.</param>
         </member>
         <member name="M:PayPal.Log.BaseLogger.Error(System.String)">
             <summary>
-            Abstract wrapper for Error
+            Records an error message to the log.
             </summary>
-            <param name="message"></param>
+            <param name="message">The message to be logged.</param>
         </member>
         <member name="M:PayPal.Log.BaseLogger.Error(System.String,System.Exception)">
             <summary>
-            Abstract wrapper for Error
+            Records an error message, including any exception details, to the log.
             </summary>
-            <param name="message"></param>
-            <param name="exception"></param>
+            <param name="message">The message to be logged.</param>
+            <param name="exception">Exception details to be logged.</param>
         </member>
         <member name="M:PayPal.Log.BaseLogger.ErrorFormat(System.String,System.Object[])">
             <summary>
-            Abstract wrapper for ErrorFormat
+            Records a formatted error message to the log.
             </summary>
-            <param name="format"></param>
-            <param name="args"></param>
+            <param name="format">A composite format string to be logged.</param>
+            <param name="args">An array that contains zero or more objects to format.</param>
         </member>
         <member name="M:PayPal.Log.BaseLogger.Info(System.String)">
             <summary>
-            Abstract wrapper for Info
+            Records an informational message to the log.
             </summary>
-            <param name="message"></param>
+            <param name="message">The message to be logged.</param>
         </member>
         <member name="M:PayPal.Log.BaseLogger.Info(System.String,System.Exception)">
             <summary>
-            Abstract wrapper for Info
+            Records an informational message, including any exception details, to the log.
             </summary>
-            <param name="message"></param>
-            <param name="exception"></param>
+            <param name="message">The message to be logged.</param>
+            <param name="exception">Exception details to be logged.</param>
         </member>
         <member name="M:PayPal.Log.BaseLogger.InfoFormat(System.String,System.Object[])">
             <summary>
-            Abstract wrapper for InfoFormat
+            Records a formatted informational message to the log.
             </summary>
-            <param name="format"></param>
-            <param name="args"></param>
+            <param name="format">A composite format string to be logged.</param>
+            <param name="args">An array that contains zero or more objects to format.</param>
         </member>
         <member name="M:PayPal.Log.BaseLogger.Warn(System.String)">
             <summary>
-            Abstract wrapper for Warn
+            Records a warning message to the log.
             </summary>
-            <param name="message"></param>
+            <param name="message">The message to be logged.</param>
         </member>
         <member name="M:PayPal.Log.BaseLogger.Warn(System.String,System.Exception)">
             <summary>
-            Abstract wrapper for Warn
+            Records a warning message, including any exception details, to the log.
             </summary>
-            <param name="message"></param>
-            <param name="exception"></param>
+            <param name="message">The message to be logged.</param>
+            <param name="exception">Exception details to be logged.</param>
         </member>
         <member name="M:PayPal.Log.BaseLogger.WarnFormat(System.String,System.Object[])">
             <summary>
-            Abstract wrapper for WarnFormat
+            Records a formatted warning message to the log.
             </summary>
-            <param name="format"></param>
-            <param name="args"></param>
+            <param name="format">A composite format string to be logged.</param>
+            <param name="args">An array that contains zero or more objects to format.</param>
         </member>
         <member name="M:PayPal.Log.BaseLogger.Flush">
             <summary>
-            Abstract flush for loggers
+            Flushes any resources or streams used by this logger.
             </summary>
         </member>
         <member name="P:PayPal.Log.BaseLogger.GivenType">
             <summary>
-            Gets and sets the given Type
+            Gets the given type associated with this logger.
             </summary>
         </member>
         <member name="P:PayPal.Log.BaseLogger.IsEnabled">
             <summary>
-            Get logger enable flag
+            Get or sets whether this logger is enabled.
             </summary>
         </member>
         <member name="P:PayPal.Log.BaseLogger.IsDebugEnabled">
             <summary>
-            Virtual wrapper for IsDebugEnabled
+            Gets whether or not debug logging is enabled.
             </summary>
         </member>
         <member name="P:PayPal.Log.BaseLogger.IsErrorEnabled">
             <summary>
-            Virtual wrapper for IsErrorEnabled
+            Gets whether or not error logging is enabled.
             </summary>
         </member>
         <member name="P:PayPal.Log.BaseLogger.IsInfoEnabled">
             <summary>
-            Virtual wrapper for IsInfoEnabled
+            Gets whether or not informational logging is enabled.
             </summary>
         </member>
         <member name="P:PayPal.Log.BaseLogger.IsWarnEnabled">
             <summary>
-            Virtual wrapper for IsWarnEnabled
+            Gets whether or not logging for warnings is enabled.
             </summary>
         </member>
         <member name="T:PayPal.Log.DiagnosticsLogger">
@@ -5004,11 +5009,6 @@
             <param name="format"></param>
             <param name="args"></param>
         </member>
-        <member name="M:PayPal.Log.Log4netLogger.Flush">
-            <summary>
-            Override flush
-            </summary>
-        </member>
         <member name="P:PayPal.Log.Log4netLogger.IsDebugEnabled">
             <summary>
             Override the wrapper for log4net ILog IsDebugEnabled
@@ -5037,6 +5037,11 @@
         <member name="F:PayPal.Log.LogConfiguration.PayPalLogKey">
             <summary>
             Key for the loggers to be set in <appSettings><add key="PayPalLogger" value="PayPal.Log.DiagnosticsLogger, PayPal.Log.Log4netLogger"/></appSettings> in configuration file
+            </summary>
+        </member>
+        <member name="P:PayPal.Log.LogConfiguration.LoggerListInConfiguration">
+            <summary>
+            Gets the list of loggers from the config.
             </summary>
         </member>
         <member name="M:PayPal.Log.Logger.Debug(System.String)">
@@ -5324,74 +5329,84 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="F:PayPal.Api.CreateFromAuthorizationCodeParameters.Code">
+        <member name="P:PayPal.Api.ClientCredentials.ClientId">
             <summary>
-            Code used in query parameters
+            Gets or sets the client ID.
             </summary>
         </member>
-        <member name="F:PayPal.Api.CreateFromAuthorizationCodeParameters.RedirectUri">
+        <member name="P:PayPal.Api.ClientCredentials.ClientSecret">
             <summary>
-            Redirect URI used in query parameters
+            Gets or sets the client secret.
             </summary>
         </member>
-        <member name="F:PayPal.Api.CreateFromAuthorizationCodeParameters.GrantType">
+        <member name="P:PayPal.Api.ClientCredentials.clientId">
             <summary>
-            Grant Type used in query parameters
+            Gets or sets the client ID.
             </summary>
         </member>
-        <member name="F:PayPal.Api.CreateFromAuthorizationCodeParameters.mapContainer">
+        <member name="P:PayPal.Api.ClientCredentials.clientSecret">
             <summary>
-            Backing map
+            Gets or sets the client secret.
+            </summary>
+        </member>
+        <member name="M:PayPal.Api.CreateFromAuthorizationCodeParameters.#ctor">
+            <summary>
+            Initializes a new instance of the CreateFromAuthorizationCodeParameters class and defaults the GrantType to 'authorization_code'.
             </summary>
         </member>
         <member name="M:PayPal.Api.CreateFromAuthorizationCodeParameters.SetCode(System.String)">
             <summary>
             Set the code
             </summary>
-            <param name="code"></param>
+            <param name="code">Authorization code received from the server</param>
         </member>
         <member name="M:PayPal.Api.CreateFromAuthorizationCodeParameters.SetRedirectUri(System.String)">
             <summary>
             Set the Redirect URI
             </summary>
-            <param name="redirectUri"></param>
+            <param name="redirectUri">Redirection endpoint that must match the one provided during the authorization request that ended in receiving the authorization code.</param>
         </member>
         <member name="M:PayPal.Api.CreateFromAuthorizationCodeParameters.SetGrantType(System.String)">
             <summary>
             Set the Grant Type
             </summary>
-            <param name="grantType"></param>
+            <param name="grantType">Token grant type.</param>
+        </member>
+        <member name="P:PayPal.Api.CreateFromAuthorizationCodeParameters.Code">
+            <summary>
+            Gets or sets the authorization code previously received from the server.
+            </summary>
+        </member>
+        <member name="P:PayPal.Api.CreateFromAuthorizationCodeParameters.RedirectUri">
+            <summary>
+            Gets or sets the redirection endpoint that must match the one provided during the authorization request that ended in receiving the authorization code.
+            </summary>
+        </member>
+        <member name="P:PayPal.Api.CreateFromAuthorizationCodeParameters.GrantType">
+            <summary>
+            Gets or sets the token grant type.
+            </summary>
+        </member>
+        <member name="P:PayPal.Api.CreateFromAuthorizationCodeParameters.ResponseType">
+            <summary>
+            Gets or sets the response type for the request.
+            </summary>
         </member>
         <member name="P:PayPal.Api.CreateFromAuthorizationCodeParameters.ContainerMap">
             <summary>
-            Backing map
+            Gets or sets the container map used to store custom parameters.
             </summary>
         </member>
-        <member name="F:PayPal.Api.CreateFromRefreshTokenParameters.Scope">
+        <member name="M:PayPal.Api.CreateFromRefreshTokenParameters.#ctor">
             <summary>
-            Scope used in query parameters
-            </summary>
-        </member>
-        <member name="F:PayPal.Api.CreateFromRefreshTokenParameters.GrantType">
-            <summary>
-            Grant Type used in query parameters
-            </summary>
-        </member>
-        <member name="F:PayPal.Api.CreateFromRefreshTokenParameters.RefreshToken">
-            <summary>
-            Refresh Token used in query parameters
-            </summary>
-        </member>
-        <member name="F:PayPal.Api.CreateFromRefreshTokenParameters.mapContainer">
-            <summary>
-            Backing map
+            Initializes a new instance of the CreateFromRefreshTokenParameters class and defaults the GrantType to 'refresh_token'.
             </summary>
         </member>
         <member name="M:PayPal.Api.CreateFromRefreshTokenParameters.SetScope(System.String)">
             <summary>
             Set the scope
             </summary>
-            <param name="scope"></param>
+            <param name="scope">Resource URL endpoints that the client wants the token to be scoped for.</param>
         </member>
         <member name="M:PayPal.Api.CreateFromRefreshTokenParameters.SetGrantType(System.String)">
             <summary>
@@ -5405,9 +5420,24 @@
             </summary>
             <param name="refreshToken"></param>
         </member>
+        <member name="P:PayPal.Api.CreateFromRefreshTokenParameters.Scope">
+            <summary>
+            Gets or sets a space-delimited string containing the resource URL endpoints that the client wants the token to be scoped for.
+            </summary>
+        </member>
+        <member name="P:PayPal.Api.CreateFromRefreshTokenParameters.GrantType">
+            <summary>
+            Gets or sets the token grant type.
+            </summary>
+        </member>
+        <member name="P:PayPal.Api.CreateFromRefreshTokenParameters.RefreshToken">
+            <summary>
+            Gets or sets a previously received refresh token.
+            </summary>
+        </member>
         <member name="P:PayPal.Api.CreateFromRefreshTokenParameters.ContainerMap">
             <summary>
-            Backing map
+            Gets or sets the container map used to store custom parameters.
             </summary>
         </member>
         <member name="F:PayPal.Api.UserinfoParameters.Schema">
@@ -5435,6 +5465,38 @@
             <summary>
             Gets and sets the backing map
             </summary>
+        </member>
+        <member name="M:PayPal.Api.OpenIdConnectSession.GetRedirectUrl(System.String,System.Collections.Generic.List{System.String},PayPal.Api.APIContext)">
+            <summary>
+            Returns the PayPal URL to which the user must be redirected to start the authentication / authorization process
+            </summary>
+            <param name="redirectUri">Uri on merchant website to where the user must be redirected to post paypal login</param>
+            <param name="scope">The access privilges that you are requesting for from the user. Pass empty array for all scopes. See https://developer.paypal.com/webapps/developer/docs/classic/loginwithpaypal/ht_OpenIDConnect/#parameters for more information</param>
+            <param name="apiContext">APIContext containing the config and client credentials to use.</param>
+            <returns>A string containing the PayPal URL to redirect the user to begin the authorization process.</returns>
+        </member>
+        <member name="M:PayPal.Api.OpenIdConnectSession.GetLogoutUrl(System.String,System.String,PayPal.Api.APIContext)">
+            <summary>
+            Returns the URL to which the user must be redirected to logout from the OpenId provider (i.e., PayPal)
+            </summary>
+            <param name="redirectUri">Redirect URI for your site where you want PayPal to redirect to after the user has completed logging out.</param>
+            <param name="idToken">id_token from the Tokeninfo object</param>
+            <param name="apiContext">APIContext containing the config to use.</param>
+            <returns>A string containing the PayPal URL to redirect the user to logout.</returns>
+        </member>
+        <member name="M:PayPal.Api.OpenIdConnectSession.GetConfigWithDefaults(PayPal.Api.APIContext)">
+            <summary>
+            Helper method for getting the config to use for constructing the openid authorization and logout URLs.
+            </summary>
+            <param name="apiContext"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PayPal.Api.OpenIdConnectSession.GetOpenIdRedirectBaseUrl(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Helper method for getting the openid redirect URL.
+            </summary>
+            <param name="config">Configuration map specifying whether the URL will be for Sandbox or Live.</param>
+            <returns>A string containing the openid redirect URL.</returns>
         </member>
         <member name="F:PayPal.PayPalResource.logger">
             <summary>
@@ -5616,10 +5678,11 @@
             Gets the version of the current .NET environment.
             </summary>
         </member>
-        <member name="M:PayPal.Util.QueryParameters.ToUrlFormattedString">
+        <member name="M:PayPal.Util.QueryParameters.ToUrlFormattedString(System.Boolean)">
             <summary>
             Converts the dictionary of query parameters to a URL-formatted string. Empty values are ommitted from the parameter list.
             </summary>
+            <param name="includeLeadingQueryToken">If true, prepends a '?' character to the query string.</param>
             <returns>A URL-formatted string containing the query parameters</returns>
         </member>
         <member name="M:PayPal.Util.SDKUtil.FormatURIPath(System.String,System.Object[])">
@@ -5713,6 +5776,13 @@
             </summary>
         </member>
         <member name="M:PayPal.Api.OpenIdConnect.Userinfo.GetUserinfo(PayPal.Api.APIContext,PayPal.Api.UserinfoParameters)">
+            <summary>
+            Returns user details
+            <param name="apiContext">APIContext to be used for the call.</param>
+            <param name="userinfoParameters">Query parameters used for API call</param>
+            </summary>
+        </member>
+        <member name="M:PayPal.Api.OpenIdConnect.Userinfo.GetUserinfo(PayPal.Api.APIContext)">
             <summary>
             Returns user details
             <param name="apiContext">APIContext to be used for the call.</param>

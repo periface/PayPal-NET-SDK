@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using PayPal.Util;
+using System;
 
 namespace PayPal.Api.OpenIdConnect
 {
@@ -133,15 +134,24 @@ namespace PayPal.Api.OpenIdConnect
         /// <param name="apiContext">APIContext to be used for the call.</param>
         /// <param name="userinfoParameters">Query parameters used for API call</param>
         /// </summary>
+        [Obsolete("This method is obsolete. Use GetUserInfo(apiContext) instead.", false)]
         public static Userinfo GetUserinfo(APIContext apiContext, UserinfoParameters userinfoParameters)
         {
-            string pattern = "v1/identity/openidconnect/userinfo?schema={0}&access_token={1}";
-            object[] parameters = new object[] { userinfoParameters };
-            string resourcePath = SDKUtil.FormatURIPath(pattern, parameters);
-            if (apiContext == null)
-            {
-                apiContext = new APIContext();
-            }
+            return GetUserinfo(apiContext);
+        }
+
+        /// <summary>
+        /// Returns user details
+        /// <param name="apiContext">APIContext to be used for the call.</param>
+        /// <param name="userinfoParameters">Query parameters used for API call</param>
+        /// </summary>
+        public static Userinfo GetUserinfo(APIContext apiContext)
+        {
+            // Validate the arguments to be used in the request
+            ArgumentValidator.ValidateAndSetupAPIContext(apiContext);
+
+            // Configure and send the request
+            string resourcePath = "v1/identity/openidconnect/userinfo?schema=openid";
             apiContext.MaskRequestId = true;
             return PayPalResource.ConfigureAndExecute<Userinfo>(apiContext, HttpMethod.GET, resourcePath);
         }
